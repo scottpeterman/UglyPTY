@@ -1,0 +1,12 @@
+include uglypty/*.html
+recursive-include uglypty/icons *
+recursive-include uglypty/Library *
+recursive-include uglypty/static *
+recursive-include uglypty/static/images *
+recursive-include uglypty/sessions *
+recursive-include uglypty/uglyplugin_serial *
+recursive-include uglypty/uglyplugin_collector *
+recursive-include uglypty/uglyplugin_grep *
+recursive-include uglypty/uglyplugin_nbtosession *
+recursive-include uglypty/uglyplugin_parsers *
+recursive-include uglypty/uglyplugin_tftp *
