@@ -54,7 +54,7 @@ This application does NOT wrap a backend web server like Webssh. It DOES use xte
 
 <div align="center">
   <img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/toolbox.png" alt="UglyPTY Dark" width="400px">
-  <hr><img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/cdp_map.png" alt="UglyPTY Light Splash" width="400px">
+  <hr><img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/ttpbuilder.png" alt="UglyPTY Light Splash" width="400px">
   
 </div>
 

@@ -1,5 +1,8 @@
+import json
+
 from PyQt6.QtCore import Qt, pyqtSignal, QThread
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QProgressBar, QLabel
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QProgressBar, QLabel, \
+    QFileDialog
 import pynetbox
 import yaml
 import urllib3
@@ -11,6 +14,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class DownloadThread(QThread):
     progress_signal = pyqtSignal(int)
     status_signal = pyqtSignal(str)
+    save_file_signal = pyqtSignal(object)
 
     def __init__(self, token, url):
         QThread.__init__(self)
@@ -70,11 +74,22 @@ class DownloadThread(QThread):
 
                 # Update the progress bar
                 self.progress_signal.emit((counter * 100) // total_sites)
-
+            # save successfull settings
+            settings = {
+                "token": self.token,
+                "url": self.url
+            }
+            try:
+                with open("netbox_settings.json", "w") as f:
+                    json.dump(settings, f)
+            except Exception as e:
+                print(f"failed to save netbox settings! {e}")
             # Save the YAML file
-            self.status_signal.emit("Status: Saving YAML File")
-            with open("netbox_sessions.yaml", "w") as f:
-                yaml.dump(uglypty_list, f, default_flow_style=False)
+            # self.status_signal.emit("Status: Saving YAML File")
+            # with open("netbox_sessions.yaml", "w") as f:
+            #     yaml.dump(uglypty_list, f, default_flow_style=False)
+            self.save_file_signal.emit(uglypty_list)
+
 
             self.status_signal.emit("Download Complete. Saved to 'netbox_sessions.yaml'")
             self.progress_signal.emit(100)
@@ -83,11 +98,28 @@ class DownloadThread(QThread):
             print("An error occurred:", e)
             self.status_signal.emit("Status: An error occurred")
 
+def create_default_settings():
+    default_settings = {
+        "token": "",
+        "url": "http://netbox.yourcompany.com"
+    }
+    with open("netbox_settings.json", "w") as f:
+        json.dump(default_settings, f)
 class App(QWidget):
     def __init__(self, parrent=None):
         super().__init__()
         self.parent = parrent
         self.title = 'Netbox to UglyPTY YAML Exporter'
+        # Load Netbox settings from JSON if exists, else create it.
+        try:
+            with open("netbox_settings.json", "r") as f:
+                settings = json.load(f)
+            self.default_token = settings.get("token", "")
+            self.default_url = settings.get("url", "http://netbox.yourcompany.com")
+        except FileNotFoundError:
+            create_default_settings()
+            self.default_token = ""
+            self.default_url = "http://netbox.yourcompany.com"
         self.initUI()
 
     def initUI(self):
@@ -97,11 +129,13 @@ class App(QWidget):
         self.tokenField = QLineEdit(self)
         self.tokenField.setText("")
         self.tokenField.setPlaceholderText('Enter your Netbox Token')
+        self.tokenField.setText(self.default_token)
         layout.addWidget(self.tokenField)
 
         self.urlField = QLineEdit(self)
         self.urlField.setText("http://netbox.yourcompany.com")
         self.urlField.setPlaceholderText('Enter your Netbox URL')
+        self.urlField.setText(self.default_url)
         layout.addWidget(self.urlField)
 
         self.downloadButton = QPushButton('Download', self)
@@ -121,8 +155,18 @@ class App(QWidget):
         self.downloadThread = DownloadThread(self.tokenField.text(), self.urlField.text())
         self.downloadThread.progress_signal.connect(self.updateProgressBar)
         self.downloadThread.status_signal.connect(self.updateStatusLabel)
+        self.downloadThread.save_file_signal.connect(self.showSaveFileDialog)
         self.downloadThread.start()
 
+    def showSaveFileDialog(self, uglypty_list):
+
+        filePath, _ = QFileDialog.getSaveFileName(self, "Save File", "", "YAML Files (*.yaml);;All Files (*)")
+        if filePath:
+            if not filePath.endswith('.yaml'):
+                filePath += '.yaml'
+            with open(filePath, "w") as f:
+                yaml.dump(uglypty_list, f, default_flow_style=False)
+            self.statusLabel.setText(f"Download Complete. Saved to {filePath}")
     def updateProgressBar(self, value):
         self.progress.setValue(value)
 
