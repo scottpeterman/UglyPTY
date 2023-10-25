@@ -6,7 +6,7 @@ from collections import defaultdict
 
 
 class NetworkDiscovery:
-    BASE_PATH = "./cli_cdp_output/"
+    # BASE_PATH = "./cli_cdp_output/"
 
     ttp_templates = [
         '''
@@ -31,9 +31,10 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
      Address : {{ ip }}
 '''
     ]
+    
     def __init__(self, exclude_string):
         self.exclude_string = exclude_string
-        self.BASE_PATH = "./cli_cdp_output/"
+        # self.BASE_PATH = "./cli_cdp_output/"
 
     def is_excluded(self, device):
         excluded = False
@@ -75,12 +76,8 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
     def discover_network(self):
         network_map = defaultdict(list)
         # Get the absolute path of the directory where the Python script resides
-        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Navigate two levels up
-        # self.APP_PATH = os.path.dirname(os.path.dirname(script_dir))
-        # print(os.path.join(self.APP_PATH,self.BASE_PATH))
-        # folder_to_clean = os.path.join(self.APP_PATH,self.BASE_PATH)
         folder_to_clean = "./cli_cdp_output"
         for file_name in os.listdir(folder_to_clean):
             device_name = self.filter_filename(file_name.split(".")[0])
@@ -106,7 +103,7 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
                     except Exception as e:
                         print(e)
 
-        with open(self.APP_PATH + "./Output/network_map.json", "w") as fh:
+        with open("./Output/network_map.json", "w") as fh:
             fh.write(json.dumps(network_map, indent=2))
 
         return network_map
@@ -119,3 +116,4 @@ if __name__ == '__main__':
     nd = NetworkDiscovery(exclude_string="SEP")
     network_map = nd.run()
     print(json.dumps(network_map, indent=4))
+

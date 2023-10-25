@@ -118,7 +118,7 @@ def ssh_to_device(device_source):
             return result  # Failed connection or command execution
 
         try:
-            output = connection.send_command(command_to_run, read_timeout=30)
+            output = connection.send_command(command_to_run)
         except Exception as e:
             traceback.print_exc()
             print(f"Error connecting to {ip}: {e}")
