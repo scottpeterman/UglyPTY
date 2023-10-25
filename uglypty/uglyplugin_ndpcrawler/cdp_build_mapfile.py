@@ -77,10 +77,11 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
         # Get the absolute path of the directory where the Python script resides
         script_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # Navigate two levels up
-        self.APP_PATH = os.path.dirname(os.path.dirname(script_dir))
-        print(os.path.join(self.APP_PATH,self.BASE_PATH))
-        folder_to_clean = os.path.join(self.APP_PATH,self.BASE_PATH)
+# Navigate two levels up
+        # self.APP_PATH = os.path.dirname(os.path.dirname(script_dir))
+        # print(os.path.join(self.APP_PATH,self.BASE_PATH))
+        # folder_to_clean = os.path.join(self.APP_PATH,self.BASE_PATH)
+        folder_to_clean = "./cli_cdp_output"
         for file_name in os.listdir(folder_to_clean):
             device_name = self.filter_filename(file_name.split(".")[0])
             file_path = os.path.join(folder_to_clean, file_name)

@@ -1535,7 +1535,7 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         text_browser = QtWidgets.QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
         text_browser.setHtml(
-            "<p><b>Version:</b> 0.8.13</p>"
+            "<p><b>Version:</b> 0.8.14</p>"
             "<p><b>Author:</b> Scott Peterman</p>"
             "<p><b>Github Repo:</b> <a href='https://github.com/scottpeterman/UglyPTY'>UglyPTY</a></p>"
             "<p><b>PyPI:</b> <a href='https://pypi.org/project/uglypty/'>Pip Install</a></p>"
