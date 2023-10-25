@@ -10,7 +10,7 @@ from uglypty.uglyplugin_ndpcrawler.templates import template_builder
 ttp_templates = template_builder().ttp_templates
 
 class CDPDiscover:
-    def __init__(self, seed_device, seed_device_stub, username, password, domain_name, exclude):
+    def __init__(self, seed_device, seed_device_stub, username, password, domain_name, exclude, vendor="cisco"):
         self.seed_device = seed_device
         self.seed_device_stub = seed_device_stub
         self.exclude = exclude
@@ -21,30 +21,35 @@ class CDPDiscover:
         self.username = username
         self.password = password
         self.domain_name = domain_name
+        self.vendor = vendor
     def is_excluded(self, device):
         excluded = False
         for exstring in self.exclude.split(","):
-            if exstring in device.get("device_id", "unknown"):
+            if str(exstring).strip() in device.get("device_id", "unknown"):
                 # if "SEP" in device.get("device_id", "unknown"):
                 #     print("No Phones")
                 excluded = True
                 print(f"Hit Exclusion Rule: {device.get('device_id')}")
         return excluded
 
-    def get_neighbors(self, device):
+    def get_neighbors(self, device, cmd):
 
         if self.exclude in device.get("device_id", "unknown"):
             return []
         username = str(self.username).strip()
         password = str(self.password).strip()
+        if "aruba" in self.vendor:
+            device_type = "hp_procurve"
+        else:
+            device_type = "cisco_xe"
         netmiko_device = {
-            'device_type': 'cisco_ios',
+            'device_type': device_type,
             'ip': device.get('ip', 'unknown'),
             'username': username,
             'password': password,
         }
 
-        command = 'show cdp neighbors detail'
+        command = cmd
         neighbors = []
         output_dir = 'cli_cdp_output'
         hostname = "unknown"
@@ -132,7 +137,12 @@ class CDPDiscover:
 
             if current_device_id not in self.visited:
                 self.visited.add(current_device_id)
-                neighbors = self.get_neighbors(current_device_dict)
+                if "aruba" in self.vendor:
+                    cmd = "show lldp info remote-device detail"
+                else:
+                    cmd = 'show cdp neighbors detail'
+
+                neighbors = self.get_neighbors(current_device_dict, cmd)
                 for neighbor_dict in neighbors:
                     try:
                         neighbor_device_id = self.strip_domain(neighbor_dict['device_id'])
@@ -153,17 +163,17 @@ class CDPDiscover:
 
 
 if __name__ == "__main__":
-    seed_device_ip = '172.16.1.101'
+    seed_device_ip = '10.200.124.10'
     seed_device_stub = {
         'local_port': 'N/A',
         'remote_port': 'N/A',
         'platform': 'N/A',
         'capabilities': 'N/A',
         'ip': seed_device_ip,
-        'device_id': 'R1'
+        'device_id': 'us-0445-swl-01'
     }
     # excluded_types = ['SEP']
-    discoverer = CDPDiscover(seed_device_ip, seed_device_stub, "cisco", "cisco", "company.com", exclude="SEP")
+    discoverer = CDPDiscover(seed_device_ip, seed_device_stub, "el-speterman", "T0lkien@2023", ".columbia.csc", exclude="nothing", vendor="aruba")
     with open("failed_neighbors.json", "w") as fh:
         fh.write(json.dumps(discoverer.failed_neighbors, indent=2))
     discoverer.discover()

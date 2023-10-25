@@ -26,6 +26,7 @@ from uglypty.uglyplugin_pyqtldap.pyqtldap import LdapTestClient
 from uglypty.uglyplugin_portscanlight.psgui import PortScannerGUI
 from uglypty.uglyplugin_ipcalc.ipcalc import MyWindow as IPCalc
 from uglypty.uglyplugin_ndpcrawler.make_crawl import crawl_file
+from uglypty.readme import readme_html
 
 plugins_enabled = False
 welcome_html = '''
@@ -90,7 +91,7 @@ welcome_html = '''
 </body>
 
 '''
-
+welcome_html = readme_html
 
 class Ui_dlgSelectCreds(QtWidgets.QDialog):
     def __init__(self, creds, selected_item, *args, **kwargs):
@@ -759,6 +760,7 @@ class UglyPty(QtWidgets.QWidget):
 
     def open_ndpMapper(self):
         self.ndpMapper = crawlerGuiUI()
+        self.ndpMapper.resize(600,400)
         self.ndpMapper.show()
 
     def open_ldap(self):
@@ -1259,7 +1261,7 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         return creds
 
     def on_action_map(self):
-        print(f'open maping tool')
+        print(f'open mapping tool')
 
         current_selected = self.treeWidget.currentItem()
         creds = self.get_all_creds()
@@ -1280,12 +1282,16 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         unencrypted_password = cryptonomicon(encrypted_password)
 
         print(f"Properties: {current_selected.refBinding}")
+        vendor = current_selected.refBinding.get("Vendor", "cisco")
+        if "aruba" in vendor.lower():
+            vendor = "aruba"
 
-        self.actionNdpMapper = crawlerGuiUI()
+        self.actionNdpMapper = crawlerGuiUI(vendor)
         self.actionNdpMapper.device_id_edit.setText(current_selected.refBinding['display_name'])
         self.actionNdpMapper.seed_ip_edit.setText(current_selected.refBinding['host'])
         self.actionNdpMapper.username_edit.setText(username)
         self.actionNdpMapper.password_edit.setText(unencrypted_password)
+        self.actionNdpMapper.resize(600, 600)
         self.actionNdpMapper.show()
 
 
@@ -1529,7 +1535,7 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         text_browser = QtWidgets.QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
         text_browser.setHtml(
-            "<p><b>Version:</b> 0.8.9</p>"
+            "<p><b>Version:</b> 0.8.12</p>"
             "<p><b>Author:</b> Scott Peterman</p>"
             "<p><b>Github Repo:</b> <a href='https://github.com/scottpeterman/UglyPTY'>UglyPTY</a></p>"
             "<p><b>PyPI:</b> <a href='https://pypi.org/project/uglypty/'>Pip Install</a></p>"

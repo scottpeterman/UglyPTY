@@ -24,8 +24,9 @@ class RunThread(QThread):
 
 class crawlerGuiUI(QWidget):
 
-    def __init__(self):
+    def __init__(self, vendor="cisco"):
         super(crawlerGuiUI, self).__init__()
+        self.vendor = vendor
         self.initUI()
 
 
@@ -40,7 +41,11 @@ class crawlerGuiUI(QWidget):
         )
 
     def initUI(self):
-        self.setWindowTitle('CDP Crawler and Mapper')
+        try:
+            vendor = self.vendor
+        except:
+            vendor = "cisco"
+        self.setWindowTitle(f'{vendor.upper()} NDP Crawler and Mapper')
         self.setGeometry(100, 100, 400, 400)
         self.center()
         vbox = QVBoxLayout()
@@ -113,7 +118,8 @@ class crawlerGuiUI(QWidget):
         layout_algo = self.layout_algo.text()
         map_name = self.map_name.text()
         collection_name = self.collection_name.text()
-
+        if len(str(exclude_string).strip()) == 0:
+            exclude_string = "nothing"
         cmd = [
             "cmd", "/c", sys.executable,"-u", "crawl.py",
             "--seed_ip", seed_ip,
@@ -124,7 +130,8 @@ class crawlerGuiUI(QWidget):
             "--exclude_string", exclude_string,
             "--layout_algo", layout_algo,
             "--map_name", map_name,
-            "--collection_name", collection_name
+            "--collection_name", collection_name,
+            "--vendor", self.vendor
 
         ]
 

@@ -1,5 +1,5 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtWidgets import QStyleFactory
+from PyQt6.QtWidgets import QStyleFactory, QTextEdit
 from uglypty.Library.parser_examples import p_examples
 from ttp import ttp
 from jinja2 import Template
@@ -8,6 +8,12 @@ import json
 import jmespath
 from uglypty.uglyplugin_parsers.HighlighterTEWidget import SyntaxHighlighter
 
+
+class PlainTextOnlyTextEdit(QTextEdit):
+    def insertFromMimeData(self, mime_data):
+        # Get the plain text from mime_data and insert it.
+        plain_text = mime_data.text()
+        self.textCursor().insertText(plain_text)
 class UglyParsingWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(UglyParsingWidget, self).__init__(parent)
@@ -31,7 +37,7 @@ class UglyParsingWidget(QtWidgets.QWidget):
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
 
-        self.teSource = QtWidgets.QTextEdit(self.verticalLayoutWidget)
+        self.teSource = PlainTextOnlyTextEdit(self.verticalLayoutWidget)
         self.teSource.setObjectName("teSource")
         self.verticalLayout.addWidget(self.teSource)
 
@@ -39,18 +45,21 @@ class UglyParsingWidget(QtWidgets.QWidget):
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
 
-        self.teTemplate = QtWidgets.QTextEdit(self.verticalLayoutWidget)
+        self.teTemplate = PlainTextOnlyTextEdit(self.verticalLayoutWidget)
         self.teTemplate.setObjectName("teTemplate")
         self.verticalLayout.addWidget(self.teTemplate)
 
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.pbRender = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.pbRender.setObjectName("pbRender")
+        self.pbRender.setStyleSheet("background-color: #006400; color: white;")
         self.pbRender.clicked.connect(lambda: self.render(self.mode))
+
         self.horizontalLayout.addWidget(self.pbRender)
 
         self.pbClear = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.pbClear.setObjectName("pbClear")
+        self.pbClear.setStyleSheet("background-color: #8B6508; color: white;")
         self.pbClear.clicked.connect(lambda: self.clear())
         self.horizontalLayout.addWidget(self.pbClear)
 
@@ -91,6 +100,7 @@ class UglyParsingWidget(QtWidgets.QWidget):
         self.highlighterComboBox.addItem("Cisco Highlighter")
         self.highlighterComboBox.addItem("Ansible Highlighter")
         self.highlighterComboBox.currentIndexChanged.connect(self.highlighterComboBoxChanged)
+        self.highlighterComboBox.setVisible(False)
         self.verticalLayout_4.addWidget(self.highlighterComboBox)
 
 
@@ -139,14 +149,12 @@ class UglyParsingWidget(QtWidgets.QWidget):
 
     def clear(self):
         self.teResult.clear()
+        self.teSource.clear()
+        self.teTemplate.clear()
 
 
     def modeComboBoxChanged(self, index):
-        # Get the selected mode
-        # if self.mode != "Mode":
-        #     MainWindow.setWindowTitle(f"Ugly Parsing - {self.mode}")
-        # else:
-        #     MainWindow.setWindowTitle(f"Ugly Parsing")
+
 
         print(f"Mode before change: {self.mode}")
         self.mode = self.modeComboBox.currentText()

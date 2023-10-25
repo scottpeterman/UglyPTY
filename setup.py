@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="uglypty",
-    version="0.8.11",
+    version="0.8.12",
     description="UglyPTY - A PyQt6-based SSH, Mapping and Automation Tooling.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
@@ -45,7 +45,7 @@ setup(
                      'MarkupSafe==2.1.3',
                      'matplotlib-inline==0.1.6',
                      'mypy-extensions==1.0.0',
-                      "netmiko==4.2.0",
+                      "netmiko==3.3.3",
                      'numpy==1.25.2',
                      'n2g==0.3.3',
                      'pandas==2.0.3',

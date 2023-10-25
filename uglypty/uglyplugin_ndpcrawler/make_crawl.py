@@ -2,7 +2,6 @@ import sys
 
 
 crawl_file = '''
-
 import json
 import re
 import subprocess
@@ -107,7 +106,8 @@ def shorten_intf_names(map_data, output_file):
 @click.option('--layout_algo', default="rt", help='Map Algorythm - recommended rt,kk')
 @click.option('--map_name', default="Network_map.graphml", help='.graphml file to save')
 @click.option('--collection_name', default="default", help='collection folder to backup retrieved cli info - i.e. site_name')
-def main(seed_ip, device_id, username, password, domain_name, exclude_string, layout_algo, map_name, collection_name):
+@click.option('--vendor', default="cisco", help='cisco, aruba')
+def main(seed_ip, device_id, username, password, domain_name, exclude_string, layout_algo, map_name, collection_name, vendor):
     folders_to_check = ["./Output", "./collections", "./cli_cdp_output"]
 
     # Loop through the list and create folders if they don't exist
@@ -127,12 +127,12 @@ def main(seed_ip, device_id, username, password, domain_name, exclude_string, la
         'device_id': str(device_id).strip()
     }
 
-    discoverer = CDPDiscover(seed_ip, seed_device_stub, username, password, domain_name=domain_name, exclude=exclude_string)
+    discoverer = CDPDiscover(seed_ip, seed_device_stub, username, password, domain_name=domain_name, exclude=exclude_string, vendor=vendor)
     with open("failed_neighbors.json", "w") as fh:
         fh.write(json.dumps(discoverer.failed_neighbors, indent=2))
     discoverer.discover()
     if len(discoverer.visited) < 2:
-        print(f"\\n\\nseed device failure, nothing else can be discovered!")
+        print(f"\n\nseed device failure, nothing else can be discovered!")
         return
     # Step 2
     parser = IPtoName()
@@ -162,6 +162,7 @@ def main(seed_ip, device_id, username, password, domain_name, exclude_string, la
 
 if __name__ == "__main__":
     main()
+
 '''
 class file_builder():
     def __init__(self):

@@ -190,6 +190,7 @@ class Grep(QWidget):
 
         self.openFolderButton = QPushButton('Open Folder', self)
         self.openFolderButton.clicked.connect(self.openFolder)
+        self.openFolderButton.setStyleSheet("background-color: #8B6508; color: white;")
         layout.addWidget(self.openFolderButton)
 
         self.patternInput = QLineEdit(self)
@@ -197,6 +198,7 @@ class Grep(QWidget):
         layout.addWidget(self.patternInput)
 
         self.searchButton = QPushButton('Search', self)
+        self.searchButton.setStyleSheet("background-color: #006400; color: white;")
         layout.addWidget(self.searchButton)
 
         self.resultLabel = QLabel('Results:', self)

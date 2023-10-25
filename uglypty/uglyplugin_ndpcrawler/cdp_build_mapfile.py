@@ -21,10 +21,19 @@ Device ID:{{ device_id  | split(".") | item(0) | split("(") | item(0)}}
 Device ID:{{ device_id | split(".") | item(0) | split("(") | item(0) }}
 Platform: {{ platform | ORPHRASE }},  Capabilities: {{ capabilities | ORPHRASE}}
 Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port | ORPHRASE}}
+        ''',
         '''
+  Local Port   : {{ local_port | ORPHRASE }}
+  SysName      : {{ device_id | ORPHRASE | replace(" ","") }}    
+  System Descr : {{ platform | ORPHRASE | default("unknown") }}   
+  PortDescr    :   {{ remote_port | ORPHRASE | replace(" ","") | default("SWPORT") }}    
+  System Capabilities Supported  : {{ capabilities | ORPHRASE  | default("unknown") | replace(" ","_") }}
+     Address : {{ ip }}
+'''
     ]
     def __init__(self, exclude_string):
         self.exclude_string = exclude_string
+        self.BASE_PATH = "./cli_cdp_output/"
 
     def is_excluded(self, device):
         excluded = False
@@ -65,10 +74,16 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
 
     def discover_network(self):
         network_map = defaultdict(list)
+        # Get the absolute path of the directory where the Python script resides
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-        for file_name in os.listdir(self.BASE_PATH):
+        # Navigate two levels up
+        self.APP_PATH = os.path.dirname(os.path.dirname(script_dir))
+        print(os.path.join(self.APP_PATH,self.BASE_PATH))
+        folder_to_clean = os.path.join(self.APP_PATH,self.BASE_PATH)
+        for file_name in os.listdir(folder_to_clean):
             device_name = self.filter_filename(file_name.split(".")[0])
-            file_path = os.path.join(self.BASE_PATH, file_name)
+            file_path = os.path.join(folder_to_clean, file_name)
             with open(file_path) as fh:
                 content = fh.read()
 
@@ -80,7 +95,9 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
                     if self.is_excluded(neighbor):
                         continue
                     else:
-                        cleaned_data.append(neighbor)
+                        keys = list(neighbor.keys())
+                        if 'device_id' in keys and 'local_port' in keys and 'remote_port' in keys:
+                            cleaned_data.append(neighbor)
 
                 if cleaned_data:
                     try:
@@ -88,7 +105,7 @@ Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port
                     except Exception as e:
                         print(e)
 
-        with open("./Output/network_map.json", "w") as fh:
+        with open(self.APP_PATH + "./Output/network_map.json", "w") as fh:
             fh.write(json.dumps(network_map, indent=2))
 
         return network_map

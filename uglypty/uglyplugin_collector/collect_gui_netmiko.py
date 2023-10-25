@@ -103,7 +103,9 @@ class CollectorForm(QWidget):
 
         self.yaml_button = QPushButton("Browse...")
         self.yaml_button.clicked.connect(open_file_dialog)
+        self.yaml_button.setStyleSheet("background-color: #8B6508; color: white;")
         self.yaml_layout.addWidget(self.yaml_button)
+
 
         # Add the new hbox layout to your existing layout
         self.layout.addLayout(self.yaml_layout)
@@ -121,6 +123,7 @@ class CollectorForm(QWidget):
 
         self.select_folder_button = QPushButton("Select Folder")
         self.select_folder_button.clicked.connect(self.select_folder)
+        self.select_folder_button.setStyleSheet("background-color: #8B6508; color: white;")
         self.directory_layout = QHBoxLayout()
         self.directory_layout.addWidget(self.edit_output_dir)
         self.directory_layout.addWidget(self.select_folder_button)
@@ -135,6 +138,7 @@ class CollectorForm(QWidget):
         self.progress_bar = QProgressBar()
         self.progress_bar.setVisible(False)
         self.button_start = QPushButton("Start")
+        self.button_start.setStyleSheet("background-color: #006400; color: white;")
 
         self.label_success = QLabel("Success: 0")
         self.label_failure = QLabel("Failures: 0")

@@ -44,16 +44,19 @@ class TftpServerApp(QWidget):
         self.path_edit.setPlaceholderText("Enter path to serve files from...")
         layout.addWidget(self.path_edit)
 
-        self.browse_button = QPushButton("Browse", self)
+        self.browse_button = QPushButton("Files Served From", self)
         self.browse_button.clicked.connect(self.browse_folder)
+        self.browse_button.setStyleSheet("background-color: #8B6508; color: white;")
         layout.addWidget(self.browse_button)
 
         self.start_button = QPushButton("Start Server", self)
         self.start_button.clicked.connect(self.start_server)
+        self.start_button.setStyleSheet("background-color: #006400; color: white;")
         layout.addWidget(self.start_button)
 
         self.stop_button = QPushButton("Stop Server", self)
         self.stop_button.clicked.connect(self.stop_server)
+        self.stop_button.setStyleSheet("background-color: #8B0000; color: white;")
         layout.addWidget(self.stop_button)
 
         self.log_text_edit = QTextEdit()

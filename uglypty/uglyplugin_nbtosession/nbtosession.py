@@ -140,6 +140,7 @@ class App(QWidget):
 
         self.downloadButton = QPushButton('Download', self)
         self.downloadButton.clicked.connect(self.startDownloadThread)
+        self.downloadButton.setStyleSheet("background-color: #006400; color: white;")
         layout.addWidget(self.downloadButton)
 
         self.progress = QProgressBar(self)

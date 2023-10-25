@@ -11,7 +11,13 @@ Device ID:{{ device_id  | split(".") | item(0) | split("(") | item(0)}}
 Device ID:{{ device_id | split(".") | item(0) | split("(") | item(0) }}
 Platform: {{ platform | ORPHRASE }},  Capabilities: {{ capabilities | ORPHRASE}}
 Interface: {{ local_port | ORPHRASE }},  Port ID (outgoing port): {{ remote_port | ORPHRASE}}
-'''
+''', '''
+  Local Port   : {{ local_port | ORPHRASE }}
+  SysName      : {{ device_id | ORPHRASE | replace(" ","") }}    
+  System Descr : {{ platform | ORPHRASE | default("unknown") }}   
+  PortDescr    :   {{ remote_port | ORPHRASE | replace(" ","") | default("SWPORT") }}    
+  System Capabilities Supported  : {{ capabilities | ORPHRASE  | default("unknown") | replace(" ","_") }}
+     Address : {{ ip }}'''
 ]
 class template_builder():
     def __init__(self):
