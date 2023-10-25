@@ -132,7 +132,7 @@ def main(seed_ip, device_id, username, password, domain_name, exclude_string, la
         fh.write(json.dumps(discoverer.failed_neighbors, indent=2))
     discoverer.discover()
     if len(discoverer.visited) < 2:
-        print(f"\n\nseed device failure, nothing else can be discovered!")
+        print(f"\\n\\nseed device failure, nothing else can be discovered!")
         return
     # Step 2
     parser = IPtoName()
