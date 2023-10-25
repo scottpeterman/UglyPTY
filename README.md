@@ -152,6 +152,7 @@ Here are some snapshots of UglyPTY in action:
   <hr><img src="https://github.com/scottpeterman/UglyPTY-Plugins/raw/main/screen_shots/UglyParser.png" alt="UglyPTY parsers" width="400px">
   <hr><img src="https://github.com/scottpeterman/UglyPTY-Plugins/raw/main/screen_shots/serial.png" alt="UglyPTY Serial" width="400px">
    <hr><img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/cdp_map.png" alt="UglyPTY Map" width="400px">
+   <hr><img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/sample_map.png" alt="UglyPTY Sample Map" width="400px">
   
 </div>
 
