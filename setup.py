@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="uglypty",
-    version="0.8.16",
+    version="0.8.18",
     description="UglyPTY - A PyQt6-based SSH, Mapping and Automation Tooling.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
@@ -20,6 +20,7 @@ setup(
     install_requires=['asttokens==2.2.1',
                      'backcall==0.2.0',
                      'bcrypt==4.0.1',
+                     'bs4==0.0.1',
                      'cached-property==1.5.2',
                      'certifi==2023.7.22',
                      'cffi==1.15.1',

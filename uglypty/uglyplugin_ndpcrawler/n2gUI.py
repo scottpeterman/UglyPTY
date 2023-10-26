@@ -120,8 +120,10 @@ class crawlerGuiUI(QWidget):
         collection_name = self.collection_name.text()
         if len(str(exclude_string).strip()) == 0:
             exclude_string = "nothing"
+        path_to_python = sys.executable
+        path_to_python = path_to_python.replace("python.exe", "pythonw.exe")
         cmd = [
-            "cmd", "/c", sys.executable,"-u", "crawl.py",
+            path_to_python,"-u", "crawl.py",
             "--seed_ip", seed_ip,
             "--device_id", device_id,
             "--username", username,

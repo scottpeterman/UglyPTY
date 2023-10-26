@@ -15,7 +15,7 @@ from uglypty.Library.plugins import PluginManager
 from uglypty.uglyplugin_nbtosession.nbtosession import App as NB_App
 from uglypty.uglyplugin_tftp.server import TftpServerApp
 from uglypty.uglyplugin_serial.qtserialcon_widget import Ui_SerialWidget, SerialWidgetWrapper
-from uglypty.uglydiff2 import App as ug2
+from uglypty.uglydiff_ui import UI_Diff
 from uglypty.uglyplugin_collector.collect_gui_netmiko import CollectorForm
 from uglypty.uglyplugin_grep.UglyGrep import Grep
 from uglypty.uglyplugin_parsers.uglyparsers import UglyParsingWidget
@@ -736,8 +736,9 @@ class UglyPty(QtWidgets.QWidget):
         self.sftp_server.show()
 
     def open_uglydiff2(self):
-        print("opening uglydiff2")
-        self.ug2 = ug2(self)
+        print("opening diff")
+        self.ug2 = UI_Diff()
+        self.ug2.resize(1300, 700)
         self.ug2.show()
 
     def open_uglycollector(self):
@@ -1535,7 +1536,7 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         text_browser = QtWidgets.QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
         text_browser.setHtml(
-            "<p><b>Version:</b> 0.8.16</p>"
+            "<p><b>Version:</b> 0.8.18</p>"
             "<p><b>Author:</b> Scott Peterman</p>"
             "<p><b>Github Repo:</b> <a href='https://github.com/scottpeterman/UglyPTY'>UglyPTY</a></p>"
             "<p><b>PyPI:</b> <a href='https://pypi.org/project/uglypty/'>Pip Install</a></p>"
