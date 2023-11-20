@@ -14,7 +14,7 @@ from uglypty.log_viewer2 import FileViewer
 from uglypty.Library.plugins import PluginManager
 from uglypty.uglyplugin_nbtosession.nbtosession import App as NB_App
 from uglypty.uglyplugin_tftp.server import TftpServerApp
-from uglypty.uglyplugin_serial.qtserialcon_widget import Ui_SerialWidget, SerialWidgetWrapper
+from uglypty.uglyplugin_serial.serialui import Ui_SerialWidget
 from uglypty.uglydiff_ui import UI_Diff
 from uglypty.uglyplugin_collector.collect_gui_netmiko import CollectorForm
 from uglypty.uglyplugin_grep.UglyGrep import Grep
@@ -301,7 +301,12 @@ class SearchDialog(QtWidgets.QDialog):
             use_creds = self.parent().get_one_creds(selected_id)
             username = use_creds[0]
             encrypted_password = use_creds[1]
-            unencrypted_password = cryptonomicon(encrypted_password)
+            try:
+                unencrypted_password = cryptonomicon(encrypted_password)
+            except Exception as e:
+                self.notify("Decrypt error", f"Unable to decrypt password: {e}")
+                return
+
 
             print(f"Properties: {session_item.refBinding}")
             host = str(session_item.refBinding['host'])
@@ -338,6 +343,13 @@ class SearchDialog(QtWidgets.QDialog):
                 self.parent().twTerminals.setCurrentIndex(index)
             except:
                 pass
+    def notify(self, message, info):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Icon.Information)
+        msg.setText(info)
+        msg.setWindowTitle(message)
+        msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+        retval = msg.exec()
 
 
 
@@ -547,7 +559,7 @@ class UglyPty(QtWidgets.QWidget):
         self.actionSerialConsole = QtGui.QAction(parent=Ui_UglyPTY)
         self.actionSerialConsole.setObjectName("actionSerialConsole")
         self.menuTools.addAction(self.actionSerialConsole)
-        self.actionSerialConsole.triggered.connect(lambda: self.open_serial_console())
+        self.actionSerialConsole.triggered.connect(self.open_new_serial_console)
 
         self.actionUglyDiff2 = QtGui.QAction(parent=Ui_UglyPTY)
         self.actionUglyDiff2.setObjectName("actionUglyDiff2")
@@ -776,22 +788,10 @@ class UglyPty(QtWidgets.QWidget):
         self.ipcalc = IPCalc()
         self.ipcalc.show()
 
-    def open_serial_console(self):
-        print("opening serial console")
-        # self.serial_console = Ui_SerialWidget(self)
-        self.serial_window = QMainWindow()
-        self.serial_window.resize(800, 400)
+    def open_new_serial_console(self):
+        self.serial_ui = Ui_SerialWidget()
 
-        # Use the wrapper instead of directly using Ui_SerialWidget
-        self.serial_wrapper = SerialWidgetWrapper(parent=self.serial_window)
-
-        self.serial_window.setCentralWidget(self.serial_wrapper)
-        self.serial_window.show()
-        self.serial_window.setWindowTitle(f"PyQt6 - Serial Terminal Widget - {self.serial_wrapper.serial_widget.backend.port}")
-
-
-        # self.serial_console.show()
-
+        self.serial_ui.show()
     def load_plugin(self, name, import_name):
         try:
             module_name, class_name = import_name.rsplit('.', 1)
@@ -1108,6 +1108,19 @@ class UglyPty(QtWidgets.QWidget):
         qdarktheme.setup_theme("light")
         self.theme = "dark_light"
 
+    def normalize_and_combine_sessions(self, yaml_data):
+        normalized_data = {}
+        for entry in yaml_data:
+            folder_name = entry['folder_name'].lower()
+            if folder_name in normalized_data:
+                normalized_data[folder_name]['sessions'] += entry['sessions']
+            else:
+                normalized_data[folder_name] = entry
+
+        # Convert the dictionary back to a list format similar to the original
+        combined_data = [{'folder_name': key, 'sessions': value['sessions']} for key, value in normalized_data.items()]
+        return combined_data
+
     def open_inventory_file(self, passedfile=None):
         print("open inv file")
 
@@ -1203,6 +1216,7 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
             if fileName:
                 with open(fileName, "r", encoding="utf-8") as file:
                     data = yaml.safe_load(file)
+                    data = self.normalize_and_combine_sessions(data)
                     self.load_data_to_tree(self.treeWidget, data)
 
 
@@ -1280,8 +1294,12 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         use_creds = self.get_one_creds(selected_id)
         username = use_creds[0]
         encrypted_password = use_creds[1]
-        unencrypted_password = cryptonomicon(encrypted_password)
-
+        # unencrypted_password = cryptonomicon(encrypted_password)
+        try:
+            unencrypted_password = cryptonomicon(encrypted_password)
+        except Exception as e:
+            self.notify("Decrypt error", f"Unable to decrypt password: {e}")
+            return
         print(f"Properties: {current_selected.refBinding}")
         vendor = current_selected.refBinding.get("Vendor", "cisco")
         if "aruba" in vendor.lower():
@@ -1315,7 +1333,12 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         use_creds = self.get_one_creds(selected_id)
         username = use_creds[0]
         encrypted_password = use_creds[1]
-        unencrypted_password = cryptonomicon(encrypted_password)
+        # unencrypted_password = cryptonomicon(encrypted_password)
+        try:
+            unencrypted_password = cryptonomicon(encrypted_password)
+        except Exception as e:
+            self.notify("Decrypt error", f"Unable to decrypt password: {e}")
+            return
 
         print(f"Properties: {current_selected.refBinding}")
         host = str(current_selected.refBinding['host'])

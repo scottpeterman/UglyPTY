@@ -22,10 +22,12 @@ class Ui_dlgCreds(QtWidgets.QDialog):
 
         self.label = QtWidgets.QLabel(dlgCreds)
         self.label.setObjectName("label")
+        self.label.setVisible(False)
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label)
         self.leID = QtWidgets.QLineEdit(dlgCreds)
         self.leID.setObjectName("leID")
         self.leID.setReadOnly(True)
+        self.leID.setVisible(False)
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.leID)
         self.label_2 = QtWidgets.QLabel(dlgCreds)
         self.label_2.setObjectName("label_2")

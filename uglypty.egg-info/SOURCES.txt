@@ -26,6 +26,7 @@ uglypty/Library/creds_widget.py
 uglypty/Library/db.py
 uglypty/Library/log_viewer2.py
 uglypty/Library/log_viewer_widget.py
+uglypty/Library/model2.py
 uglypty/Library/models.py
 uglypty/Library/parser_examples.py
 uglypty/Library/plugins.py
@@ -138,7 +139,7 @@ uglypty/uglyplugin_pyqtldap/__init__.py
 uglypty/uglyplugin_pyqtldap/pyqtldap.py
 uglypty/uglyplugin_serial/__init__.py
 uglypty/uglyplugin_serial/qtserialcon.html
-uglypty/uglyplugin_serial/qtserialcon_widget.py
+uglypty/uglyplugin_serial/serialui.py
 uglypty/uglyplugin_serial/Library/__init__.py
 uglypty/uglyplugin_serial/Library/serialschemahandler.py
 uglypty/uglyplugin_serial/Library/serialshell.py
@@ -147,12 +148,13 @@ uglypty/uglyplugin_serial/Library/__pycache__/__init__.cpython-39.pyc
 uglypty/uglyplugin_serial/Library/__pycache__/serialshell.cpython-39.pyc
 uglypty/uglyplugin_serial/Library/__pycache__/serialshellreader.cpython-39.pyc
 uglypty/uglyplugin_serial/__pycache__/__init__.cpython-39.pyc
-uglypty/uglyplugin_serial/__pycache__/qtserialcon_widget.cpython-39.pyc
-uglypty/uglyplugin_serial/static/fullscreen.min.css
-uglypty/uglyplugin_serial/static/winconfrontend.js
-uglypty/uglyplugin_serial/static/xterm-addon-fit.min.js
-uglypty/uglyplugin_serial/static/xterm.min.css
-uglypty/uglyplugin_serial/static/xterm.min.js
+uglypty/uglyplugin_serial/__pycache__/serialui.cpython-39.pyc
+uglypty/uglyplugin_serial/serialassets/qtserialcon.html
+uglypty/uglyplugin_serial/serialassets/static/fullscreen.min.css
+uglypty/uglyplugin_serial/serialassets/static/winconfrontend.js
+uglypty/uglyplugin_serial/serialassets/static/xterm-addon-fit.min.js
+uglypty/uglyplugin_serial/serialassets/static/xterm.min.css
+uglypty/uglyplugin_serial/serialassets/static/xterm.min.js
 uglypty/uglyplugin_sftp/__init__.py
 uglypty/uglyplugin_sftp/sftp_lib.py
 uglypty/uglyplugin_sftp/sftpqt.py

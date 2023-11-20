@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: uglypty
-Version: 0.8.19
-Summary: UglyPTY - A PyQt6-based SSH, Mapping and Automation Tooling.
+Version: 0.8.20
+Summary: UglyPTY - A PyQt6-based SSH, Serial Console, Mapping and Automation Tooling.
 Home-page: https://github.com/scottpeterman/UglyPTY
 Author: Scott Peterman
 Author-email: scottpeterman@gmail.com

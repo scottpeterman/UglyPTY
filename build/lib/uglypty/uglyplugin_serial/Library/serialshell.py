@@ -45,15 +45,14 @@ class SerialBackend(QObject):
 
     @pyqtSlot()
     def disconnect(self):
+        if self.reader_thread:
+            self.reader_thread.stop()  # Signal the thread to stop
+            self.reader_thread.quit()  # Instruct the thread to quit
+            self.reader_thread.wait()  # Wait for the thread to finish
+
         if self.serial and self.serial.is_open:
             self.serial.close()
-        if self.reader_thread:
-            self.reader_thread.quit()
-            self.reader_thread.wait()
-        try:
-            self.ui.close()
-        except Exception as e:
-            print(f"{e}")
+
 
 
     @pyqtSlot(str)
