@@ -9,7 +9,16 @@ The whole point of the UglyPTY project is not to solve every problem, but to pro
 ### Python needed a native SSH GUI Terminal
 This application does NOT wrap a backend web server like Webssh. It DOES use xterm.js for terminal emulation.
 
-> **Note**: This is a VERY beta release with a lot of functionality.
+ **Note**: This is a VERY beta release with a lot of functionality.
+ <br>**Latest Changes**: I am still adding capabilities
+  - Expanded FTP/SFTP support. Much better performance across a WAN for those network OS upgrades/backups
+  - New SNMP Interface Monitoring, on demand! v2 and v3 support
+
+<div align="center">
+  <img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/ftp.png" alt="FTP/SFTP" width="400px">
+  <hr><img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/snmp_lab.png" alt="SNMP Utilization" width="400px">
+  <hr><img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/snmpv3.png" alt="SNMPv2/3" width="400px">
+</div>
 
 ## Features
 

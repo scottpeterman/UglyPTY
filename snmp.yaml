@@ -1,0 +1,6 @@
+authkey: yourkey
+authproto: SHA
+community: readonly
+privkey: yourkey
+privproto: AES128
+username: svc_networkmonitoring

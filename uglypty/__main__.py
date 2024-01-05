@@ -1,8 +1,10 @@
 import copy
+import subprocess
+
 from PyQt6 import QtGui, QtWidgets
 from uglypty.Library.qtssh_widget import Ui_Terminal as qtssh_widget
 from PyQt6.QtWidgets import QMessageBox, QTreeWidgetItem, QStyleFactory, QMainWindow, QDialog, QVBoxLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal, QProcess
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 import yaml
@@ -13,14 +15,12 @@ from uglypty.Library.util import cryptonomicon, generate_key, create_db, create_
 from uglypty.log_viewer2 import FileViewer
 from uglypty.Library.plugins import PluginManager
 from uglypty.uglyplugin_nbtosession.nbtosession import App as NB_App
-from uglypty.uglyplugin_tftp.server import TftpServerApp
 from uglypty.uglyplugin_serial.serialui import Ui_SerialWidget
 from uglypty.uglydiff_ui import UI_Diff
 from uglypty.uglyplugin_collector.collect_gui_netmiko import CollectorForm
 from uglypty.uglyplugin_grep.UglyGrep import Grep
 from uglypty.uglyplugin_parsers.uglyparsers import UglyParsingWidget
 from uglypty.uglyplugin_yaml.YAMLSearch import YAMLViewer
-from uglypty.uglyplugin_sftp.sftpqt import SFTPWidget
 from uglypty.uglyplugin_ndpcrawler.n2gUI import crawlerGuiUI
 from uglypty.uglyplugin_pyqtldap.pyqtldap import LdapTestClient
 from uglypty.uglyplugin_portscanlight.psgui import PortScannerGUI
@@ -354,6 +354,9 @@ class SearchDialog(QtWidgets.QDialog):
 
 
 class UglyPty(QtWidgets.QWidget):
+    finished = pyqtSignal(list)
+    errorOccurred = pyqtSignal(str)
+
     def setupUi(self, Ui_UglyPTY, global_theme="dark"):
         Ui_UglyPTY.setObjectName("Ui_UglyPTY")
         Ui_UglyPTY.resize(1291, 775)
@@ -402,6 +405,10 @@ class UglyPty(QtWidgets.QWidget):
 
         self.action_map = QAction("Map from here...", self)
         self.context_menu.addAction(self.action_map)
+
+        self.action_SNMP = QAction("SNMP", self)
+        self.context_menu.addAction(self.action_SNMP)
+        self.action_SNMP.triggered.connect(self.open_SNMP_CLI)
 
         self.action_display_properties = QAction("Display Properties...", self)
         self.context_menu.addAction(self.action_display_properties)
@@ -591,6 +598,12 @@ class UglyPty(QtWidgets.QWidget):
         self.menuTools.addAction(self.actionNdpMapper)
         self.actionNdpMapper.triggered.connect(self.open_ndpMapper)
 
+        self.actionSNMP = QtGui.QAction(parent=Ui_UglyPTY)
+        self.actionSNMP.setObjectName("actionSNMP")
+        self.menuTools.addAction(self.actionSNMP)
+        self.actionSNMP.triggered.connect(self.open_SNMP)
+
+
         self.actionLDAP = QtGui.QAction(parent=Ui_UglyPTY)
         self.actionLDAP.setObjectName("actionLDAP")
         self.menuTools.addAction(self.actionLDAP)
@@ -711,6 +724,7 @@ class UglyPty(QtWidgets.QWidget):
         self.actionUglyDiff2.setText(_translate("Ui_UglyPTY", "Diff"))
         self.actionParsers.setText(_translate("Ui_UglyPTY", "TTP/Jinja2/JMesPath"))
         self.actionNdpMapper.setText(_translate("Ui_UglyPTY", "CDP Crawler and map builder"))
+        self.actionSNMP.setText(_translate("Ui_UglyPTY", "SNMP Interface Monitor"))
         self.actionSerialConsole.setText(_translate("Ui_UglyPTY", "Serial Console"))
         self.actionUglycollector.setText(_translate("Ui_UglyPTY", "Netmiko CLI Collector"))
         self.actionUglyYaml.setText(_translate("Ui_UglyPTY", "Netmiko CLI YAML Viewer"))
@@ -739,13 +753,55 @@ class UglyPty(QtWidgets.QWidget):
 
     def open_tftp(self):
         print("opening tftp")
-        self.tftp_server = TftpServerApp(self)
-        self.tftp_server.show()
+        # self.tftp_server = TftpServerApp(self)
+        # self.tftp_server.show()
+        try:
+
+            self.process = QProcess(self)
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+            # uglypty/uglyplugin_snmp/interface_monitor.py
+            # Construct the path to interface_monitor.py
+            script_path = os.path.join(current_dir, 'uglyplugin_tftp', 'server.py')
+            print(script_path)
+            # Command to run the Python script
+            command = sys.executable
+            args = [script_path]
+
+            self.process.start(command, args)  # Start the process
+
+        except Exception as e:
+                print(e)
 
     def open_sftp(self):
-        print("opening sftp")
-        self.sftp_server = SFTPWidget(self)
-        self.sftp_server.show()
+        print("opening sftp qprocess...")
+        # self.sftp_server = SFTPWidget(self)
+        # self.sftp_server.setVisible(True)
+        # self.sftp_server.show()
+        try:
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+            script_path = os.path.join(current_dir, 'uglyplugin_sftp', 'sftpqt.py')
+            print(current_dir)
+
+            # Command to run the Python script
+            command = [sys.executable, script_path]
+
+            # Start the process
+            script_dir = os.path.join(current_dir, 'uglyplugin_sftp')
+            self.process = subprocess.Popen(command, cwd=script_dir)
+            # self.process = QProcess(self)
+            # current_dir = os.path.dirname(os.path.realpath(__file__))
+            # # uglypty/uglyplugin_snmp/interface_monitor.py
+            # # Construct the path to interface_monitor.py
+            # script_path = os.path.join(current_dir, 'uglyplugin_sftp', 'sftpqt.py')
+            # print(script_path)
+            # # Command to run the Python script
+            # command = sys.executable
+            # args = [script_path]
+            #
+            # self.process.start(command, args)  # Start the process
+
+        except Exception as e:
+                print(e)
 
     def open_uglydiff2(self):
         print("opening diff")
@@ -776,6 +832,40 @@ class UglyPty(QtWidgets.QWidget):
         self.ndpMapper.resize(600,400)
         self.ndpMapper.show()
 
+    def open_SNMP_CLI(self):
+        current_selected = self.treeWidget.currentItem()
+        if current_selected is not None:
+            host_ip = current_selected.refBinding['host']
+            self.process = QProcess(self)
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+
+            # Construct the path to interface_monitor.py
+            script_path = os.path.join(current_dir, 'uglyplugin_snmp', 'interface_monitor.py')
+            print(script_path)
+            # Command to run the Python script
+            command = sys.executable
+            args = [script_path, host_ip]
+
+            self.process.start(command, args)  # Start the process
+
+    def open_SNMP(self):
+        try:
+
+            self.process = QProcess(self)
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+            # uglypty/uglyplugin_snmp/interface_monitor.py
+            # Construct the path to interface_monitor.py
+            script_path = os.path.join(current_dir, 'uglyplugin_snmp', 'interface_monitor.py')
+            print(script_path)
+            # Command to run the Python script
+            command = sys.executable
+            args = [script_path]
+
+            self.process.start(command, args)  # Start the process
+
+        except Exception as e:
+                print(e)
+
     def open_ldap(self):
         self.ldap = LdapTestClient()
         self.ldap.show()
@@ -790,7 +880,7 @@ class UglyPty(QtWidgets.QWidget):
 
     def open_new_serial_console(self):
         self.serial_ui = Ui_SerialWidget()
-
+        self.serial_ui.resize(800, 450)
         self.serial_ui.show()
     def load_plugin(self, name, import_name):
         try:

@@ -116,7 +116,7 @@ class Ui_SerialWidget(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWin = QMainWindow()
-    mainWin.resize(800, 400)
+    mainWin.resize(400, 400)
 
     serial_widget = Ui_SerialWidget(parent=mainWin)
     mainWin.setCentralWidget(serial_widget)
