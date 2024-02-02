@@ -853,9 +853,12 @@ class UglyPty(QtWidgets.QWidget):
 
             self.process = QProcess(self)
             current_dir = os.path.dirname(os.path.realpath(__file__))
-            # uglypty/uglyplugin_snmp/interface_monitor.py
-            # Construct the path to interface_monitor.py
-            script_path = os.path.join(current_dir, 'uglyplugin_snmp', 'interface_monitor.py')
+
+            # Locate the script within the installed package
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+
+            # Build the path to another file or directory in relation to the current script
+            script_path = os.path.join(current_dir, './uglyplugin_snmp/interface_monitor.py')
             print(script_path)
             # Command to run the Python script
             command = sys.executable
@@ -1649,7 +1652,6 @@ ZEg3IWux9zNJZ/Fha1fvb1wx0glxF2OFF7hESwXzB5dmn9f7Ieo2vJFgVGwxL+eVr7g3mH
         text_browser = QtWidgets.QTextBrowser(dialog)
         text_browser.setOpenExternalLinks(True)
         text_browser.setHtml(
-            "<p><b>Version:</b> 0.8.19</p>"
             "<p><b>Author:</b> Scott Peterman</p>"
             "<p><b>Github Repo:</b> <a href='https://github.com/scottpeterman/UglyPTY'>UglyPTY</a></p>"
             "<p><b>PyPI:</b> <a href='https://pypi.org/project/uglypty/'>Pip Install</a></p>"
