@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="uglypty",
-    version="0.9.3",
+    version="0.9.4",
     description="UglyPTY - A PyQt6-based SSH, Serial Console, Mapping and Automation Tooling.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
@@ -62,6 +62,7 @@ setup(
                      'pycparser>=2.21',
                      'pycryptodome>=3.18.0',
                      'Pygments>=2.16.1',
+                     'pyftpdlib>=1.5.9',
                      'PyNaCl>=1.5.0',
                      'PyQt6>=6.5.1',
                      'PyQt6-Qt6>=6.5.1',
