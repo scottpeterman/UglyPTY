@@ -81,6 +81,9 @@ This application does NOT wrap a backend web server like Webssh. It DOES use xte
     ```bash
     pip install uglypty
     ```
+### Linux dependencies
+You may also need to install libxcb with the following
+```sudo apt install libxcb-render0 libxcb-shape0 libxcb-xfixes0```
 
 To start the application, navigate to the activated virtual directory, local keys, your session database, and log files will be here:
 
