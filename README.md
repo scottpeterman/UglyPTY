@@ -2,6 +2,11 @@
 
 UglyPTY is an extensible graphical terminal emulator built with Python and PyQt6. It provides a user-friendly interface for managing and establishing SSH connections, with some great productivity of features. This is the base product of many Network Engineering automation tools currently in development. A plugin based system for adding features to the application is included in this release, along with some basic plugin examples. The best network automation tools are in python ... UglyPTY now has many built in tools from Desktop TFTP & SFTP Servers built in for code upgrades, to highly concurrent data collection automation.
 
+<div align="center">
+  <img src="https://github.com/scottpeterman/UglyPTY/raw/main/screen_shots/uglydark.PNG" alt="UglyPTY Dark" width="400px">
+
+</div>
+
 ## Why?
 
 The whole point of the UglyPTY project is not to solve every problem, but to provide a platform based on the tool network engineers use most - an SSH Terminal. Developers like text editors with add-on capabilites, this is just the equivilent for CLI focused engineers. Nothing in these plugins is supper special, I just wanted to provide enough example plugins that others could create there own tools. Both the usable .whl files, as well as original source code are included in the repo. And hopefully you enjoy using the base SSH application if thats all you need. You don't have to load any plugins to use UglyPTY, but remember, these are all beta tools, be careful ;)
@@ -167,7 +172,81 @@ Here are some snapshots of UglyPTY in action:
 
 ---
 
-**Enjoy using UglyPTY!**
+Certainly! Below is a concise README.md written in Markdown format that you can copy and paste directly into your project's README file. This README includes instructions for creating a desktop shortcut on Linux systems to launch your PyQt6 application.
+
+
+```markdown
+# UglyPTY Application Launcher
+
+This guide provides instructions on how to create a desktop shortcut for the UglyPTY application on Linux. This method allows you to launch UglyPTY without opening a terminal window.
+
+## Creating a Desktop Shortcut in Linux
+
+Follow these steps to create a desktop shortcut that launches UglyPTY directly from your desktop environment without displaying a terminal.
+
+### Step 1: Create the `.desktop` File
+
+Create a new file named `UglyPTY.desktop` on your Desktop or in `/usr/share/applications` for system-wide use.
+
+```bash
+nano ~/Desktop/UglyPTY.desktop
+```
+
+Copy and paste the following contents into the file:
+
+```ini
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=UglyPTY
+Icon=application-icon-path  # Replace this path with the actual path to your application icon
+Exec=sh -c "cd /path/to/app-folder; /path/to/venv/bin/python3 -m uglypty"
+Comment=Run UglyPTY without a terminal window
+Categories=Utility;
+```
+
+Replace `/path/to/app-folder` and `/path/to/venv/bin/python3` with the actual paths on your system.
+
+### Step 2: Make the `.desktop` File Executable
+
+Change the permissions of the `.desktop` file to make it executable:
+
+```bash
+chmod +x ~/Desktop/UglyPTY.desktop
+```
+
+### Step 3: Allow Launching
+
+If your desktop environment requires it (common in GNOME), right-click on the desktop icon and select **"Allow Launching"**.
+
+### Step 4: Test the Shortcut
+
+Double-click the shortcut icon on your desktop to launch the UglyPTY application. Ensure that the application starts without displaying a terminal window.
+
+## Troubleshooting
+
+If the shortcut does not work:
+
+- Check that the `Exec` path in your `.desktop` file is correct.
+- Ensure that all paths in the `Exec` command accurately reflect the locations on your system.
+- Verify that the file has executable permissions.
+- Consider running the command in a terminal to see if any errors are outputted that need to be addressed.
+
+## Updating Paths
+
+Regularly update the paths in the `.desktop` file and any associated scripts, especially after changes to your environment or system updates that might affect the paths.
+
+Thank you for using UglyPTY!
+```
+
+### Notes
+
+1. Make sure to replace placeholder paths and comments with actual data relevant to your setup.
+2. You might need to adjust instructions slightly depending on the desktop environment or any specific configurations unique to your system or user setup.
+
+This README should provide a clear, user-friendly guide for setting up a desktop shortcut for your application on Linux. Feel free to modify it to better fit your project’s context or specific requirements!
+
+
 
 
 ## Package Distribution
