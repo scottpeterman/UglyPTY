@@ -175,8 +175,6 @@ Here are some snapshots of UglyPTY in action:
 
 ---
 
-Certainly! Below is a concise README.md written in Markdown format that you can copy and paste directly into your project's README file. This README includes instructions for creating a desktop shortcut on Linux systems to launch your PyQt6 application.
-
 
 ```markdown
 # UglyPTY Application Launcher
@@ -241,15 +239,6 @@ Regularly update the paths in the `.desktop` file and any associated scripts, es
 
 Thank you for using UglyPTY!
 ```
-
-### Notes
-
-1. Make sure to replace placeholder paths and comments with actual data relevant to your setup.
-2. You might need to adjust instructions slightly depending on the desktop environment or any specific configurations unique to your system or user setup.
-
-This README should provide a clear, user-friendly guide for setting up a desktop shortcut for your application on Linux. Feel free to modify it to better fit your project’s context or specific requirements!
-
-
 
 
 ## Package Distribution
